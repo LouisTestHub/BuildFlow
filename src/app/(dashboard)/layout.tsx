@@ -7,23 +7,65 @@ import {
   LayoutDashboard, Briefcase, Calculator, Users, PoundSterling,
   ShieldCheck, CheckSquare, UserCog, FileText, BarChart3, Settings,
   HardHat, Search, Bell, ChevronLeft, Menu, LogOut,
-  AlertTriangle, Clock, Bug, Upload, Activity
+  AlertTriangle, Clock, Bug, Upload, Activity, BookOpen, Receipt,
+  FileSpreadsheet, Newspaper
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/dashboard/jobs", label: "Jobs", icon: Briefcase },
-  { href: "/dashboard/estimates", label: "Estimates", icon: Calculator },
-  { href: "/dashboard/subcontractors", label: "Subcontractors", icon: Users },
-  { href: "/dashboard/finance", label: "Finance", icon: PoundSterling },
-  { href: "/dashboard/safety", label: "Safety", icon: ShieldCheck },
-  { href: "/dashboard/snagging", label: "Snagging", icon: CheckSquare },
-  { href: "/dashboard/team", label: "Team", icon: UserCog },
-  { href: "/dashboard/documents", label: "Documents", icon: FileText },
-  { href: "/dashboard/reports", label: "Reports", icon: BarChart3 },
-  { href: "/dashboard/settings", label: "Settings", icon: Settings },
+const menuGroups = [
+  {
+    label: "Overview",
+    items: [
+      { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    ]
+  },
+  {
+    label: "Projects",
+    items: [
+      { href: "/dashboard/jobs", label: "Jobs", icon: Briefcase },
+      { href: "/dashboard/estimates", label: "Estimates", icon: Calculator },
+    ]
+  },
+  {
+    label: "Commercial",
+    items: [
+      { href: "/dashboard/finance", label: "Finance", icon: PoundSterling },
+      { href: "/dashboard/finance/invoices", label: "Invoices", icon: Receipt },
+      { href: "/dashboard/finance/valuations", label: "Valuations", icon: FileSpreadsheet },
+      { href: "/dashboard/finance/cis", label: "CIS", icon: Newspaper },
+    ]
+  },
+  {
+    label: "Subcontractors",
+    items: [
+      { href: "/dashboard/subcontractors", label: "Directory", icon: Users },
+    ]
+  },
+  {
+    label: "Health & Safety",
+    items: [
+      { href: "/dashboard/safety/rams", label: "RAMS", icon: ShieldCheck },
+      { href: "/dashboard/safety/incidents", label: "Incidents", icon: AlertTriangle },
+      { href: "/dashboard/safety/inductions", label: "Inductions", icon: BookOpen },
+      { href: "/dashboard/snagging", label: "Snagging", icon: CheckSquare },
+    ]
+  },
+  {
+    label: "Team",
+    items: [
+      { href: "/dashboard/team", label: "Directory", icon: UserCog },
+      { href: "/dashboard/team/timesheets", label: "Timesheets", icon: Clock },
+      { href: "/dashboard/documents", label: "Documents", icon: FileText },
+    ]
+  },
+  {
+    label: "Reports & Settings",
+    items: [
+      { href: "/dashboard/reports", label: "Reports", icon: BarChart3 },
+      { href: "/dashboard/settings", label: "Settings", icon: Settings },
+    ]
+  },
 ]
 
 interface Notification {
@@ -117,23 +159,34 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 py-4 space-y-1 px-2 overflow-y-auto">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))
-            return (
-              <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)}>
-                <div className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
-                  isActive
-                    ? "bg-[#F97316]/15 text-[#F97316]"
-                    : "text-gray-400 hover:text-white hover:bg-white/5"
-                )}>
-                  <item.icon className="w-5 h-5 flex-shrink-0" />
-                  {!collapsed && <span>{item.label}</span>}
-                </div>
-              </Link>
-            )
-          })}
+        <nav className="flex-1 py-4 px-2 overflow-y-auto">
+          {menuGroups.map((group, groupIdx) => (
+            <div key={groupIdx} className={cn("mb-6", groupIdx === 0 && "mb-4")}>
+              {!collapsed && (
+                <p className="text-[10px] uppercase tracking-wider text-gray-500 px-3 mb-2 font-semibold">
+                  {group.label}
+                </p>
+              )}
+              <div className="space-y-1">
+                {group.items.map((item) => {
+                  const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))
+                  return (
+                    <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)}>
+                      <div className={cn(
+                        "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
+                        isActive
+                          ? "bg-[#F97316]/15 text-[#F97316]"
+                          : "text-gray-400 hover:text-white hover:bg-white/5"
+                      )}>
+                        <item.icon className="w-5 h-5 flex-shrink-0" />
+                        {!collapsed && <span>{item.label}</span>}
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
         {/* Collapse toggle */}
@@ -247,7 +300,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* Mobile bottom nav */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex z-30">
-          {navItems.slice(0, 5).map((item) => {
+          {[
+            { href: "/dashboard", label: "Home", icon: LayoutDashboard },
+            { href: "/dashboard/jobs", label: "Jobs", icon: Briefcase },
+            { href: "/dashboard/finance", label: "Finance", icon: PoundSterling },
+            { href: "/dashboard/safety", label: "Safety", icon: ShieldCheck },
+            { href: "/dashboard/settings", label: "More", icon: Settings },
+          ].map((item) => {
             const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))
             return (
               <Link key={item.href} href={item.href} className="flex-1">
@@ -256,7 +315,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   isActive ? "text-[#F97316]" : "text-gray-400"
                 )}>
                   <item.icon className="w-5 h-5" />
-                  <span className="mt-0.5">{item.label.slice(0, 6)}</span>
+                  <span className="mt-0.5">{item.label}</span>
                 </div>
               </Link>
             )

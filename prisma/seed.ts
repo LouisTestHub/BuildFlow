@@ -54,6 +54,11 @@ async function main() {
     { id: "user-006", name: "Tom Richards", email: "tom@buildflow.demo", role: "SITE_MANAGER" as const, phone: "07700 900006" },
     { id: "user-007", name: "Emma Clarke", email: "emma@buildflow.demo", role: "PROJECT_MANAGER" as const, phone: "07700 900007" },
     { id: "user-008", name: "Ryan Hughes", email: "ryan@buildflow.demo", role: "ESTIMATOR" as const, phone: "07700 900008" },
+    // Demo login aliases for one-click access
+    { id: "user-101", name: "Demo Project Manager", email: "pm@buildflow.demo", role: "PROJECT_MANAGER" as const, phone: "07700 900101" },
+    { id: "user-102", name: "Demo Site Manager", email: "site@buildflow.demo", role: "SITE_MANAGER" as const, phone: "07700 900102" },
+    { id: "user-103", name: "Demo Estimator", email: "estimator@buildflow.demo", role: "ESTIMATOR" as const, phone: "07700 900103" },
+    { id: "user-104", name: "Demo Subcontractor", email: "sub@buildflow.demo", role: "SUBCONTRACTOR" as const, phone: "07700 900104" },
   ]
 
   for (const u of users) {

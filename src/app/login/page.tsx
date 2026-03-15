@@ -92,9 +92,136 @@ export default function LoginPage() {
               </Link>
             </p>
             <div className="border-t pt-4 mt-4">
-              <p className="text-xs text-gray-400 text-center">
-                Demo: admin@buildflow.demo / BuildFlow2026!
+              <p className="text-xs font-medium text-gray-600 text-center mb-3">
+                Try Demo (one-click login)
               </p>
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => {
+                    setEmail("admin@buildflow.demo")
+                    setPassword("BuildFlow2026!")
+                    setError("")
+                    setLoading(true)
+                    const result = await signIn("credentials", {
+                      email: "admin@buildflow.demo",
+                      password: "BuildFlow2026!",
+                      redirect: false,
+                    })
+                    if (result?.error) {
+                      setError("Demo login failed")
+                      setLoading(false)
+                    } else {
+                      router.push("/dashboard")
+                    }
+                  }}
+                  className="text-xs"
+                >
+                  Admin
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => {
+                    setEmail("pm@buildflow.demo")
+                    setPassword("BuildFlow2026!")
+                    setError("")
+                    setLoading(true)
+                    const result = await signIn("credentials", {
+                      email: "pm@buildflow.demo",
+                      password: "BuildFlow2026!",
+                      redirect: false,
+                    })
+                    if (result?.error) {
+                      setError("Demo login failed")
+                      setLoading(false)
+                    } else {
+                      router.push("/dashboard")
+                    }
+                  }}
+                  className="text-xs"
+                >
+                  Project Manager
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => {
+                    setEmail("site@buildflow.demo")
+                    setPassword("BuildFlow2026!")
+                    setError("")
+                    setLoading(true)
+                    const result = await signIn("credentials", {
+                      email: "site@buildflow.demo",
+                      password: "BuildFlow2026!",
+                      redirect: false,
+                    })
+                    if (result?.error) {
+                      setError("Demo login failed")
+                      setLoading(false)
+                    } else {
+                      router.push("/dashboard")
+                    }
+                  }}
+                  className="text-xs"
+                >
+                  Site Manager
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => {
+                    setEmail("estimator@buildflow.demo")
+                    setPassword("BuildFlow2026!")
+                    setError("")
+                    setLoading(true)
+                    const result = await signIn("credentials", {
+                      email: "estimator@buildflow.demo",
+                      password: "BuildFlow2026!",
+                      redirect: false,
+                    })
+                    if (result?.error) {
+                      setError("Demo login failed")
+                      setLoading(false)
+                    } else {
+                      router.push("/dashboard")
+                    }
+                  }}
+                  className="text-xs"
+                >
+                  Estimator
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => {
+                    setEmail("sub@buildflow.demo")
+                    setPassword("BuildFlow2026!")
+                    setError("")
+                    setLoading(true)
+                    const result = await signIn("credentials", {
+                      email: "sub@buildflow.demo",
+                      password: "BuildFlow2026!",
+                      redirect: false,
+                    })
+                    if (result?.error) {
+                      setError("Demo login failed")
+                      setLoading(false)
+                    } else {
+                      router.push("/dashboard")
+                    }
+                  }}
+                  className="text-xs col-span-2"
+                >
+                  Subcontractor
+                </Button>
+              </div>
             </div>
           </form>
         </CardContent>
