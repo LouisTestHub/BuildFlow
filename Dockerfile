@@ -21,4 +21,5 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/prisma ./prisma
 EXPOSE 3000
+WORKDIR /app/buildflow
 CMD ["node", "server.js"]
