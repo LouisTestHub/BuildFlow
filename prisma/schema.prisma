@@ -1,0 +1,669 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  DIRECTOR
+  ESTIMATOR
+  PROJECT_MANAGER
+  SITE_MANAGER
+  OFFICE_ADMIN
+  SUBCONTRACTOR
+  CLIENT
+}
+
+enum JobStatus {
+  TENDER
+  WON
+  LIVE
+  PRACTICAL_COMPLETION
+  FINAL_ACCOUNT
+  CLOSED
+  LOST
+}
+
+enum EstimateStatus {
+  DRAFT
+  SUBMITTED
+  ACCEPTED
+  DECLINED
+  REVISED
+}
+
+enum CISTaxStatus {
+  GROSS
+  NET
+  HIGHER_RATE
+  UNMATCHED
+  NOT_VERIFIED
+}
+
+enum InvoiceType {
+  SALES
+  PURCHASE
+  CIS
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  VOID
+}
+
+enum ValuationStatus {
+  DRAFT
+  SUBMITTED
+  CERTIFIED
+  PAID
+}
+
+enum RAMSStatus {
+  DRAFT
+  APPROVED
+  SUPERSEDED
+}
+
+enum IncidentSeverity {
+  NEAR_MISS
+  MINOR
+  MAJOR
+  RIDDOR
+}
+
+enum SnagListStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETE
+}
+
+enum SnagItemPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum SnagItemStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  VERIFIED
+}
+
+enum TimesheetStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+enum PhaseStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETE
+}
+
+enum IncidentStatus {
+  OPEN
+  INVESTIGATING
+  CLOSED
+}
+
+enum SubcontractOrderStatus {
+  DRAFT
+  ISSUED
+  ACCEPTED
+  IN_PROGRESS
+  COMPLETE
+  DISPUTED
+}
+
+model Company {
+  id                  String   @id @default(cuid())
+  name                String
+  registrationNumber  String?  @map("registration_number")
+  vatNumber           String?  @map("vat_number")
+  cisUtr              String?  @map("cis_utr")
+  address             String?
+  logo                String?
+  subscriptionPlan    String?  @map("subscription_plan")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  users               User[]
+  invitations         Invitation[]
+  jobs                Job[]
+  estimates           Estimate[]
+  subcontractors      Subcontractor[]
+  invoices            Invoice[]
+  documents           Document[]
+  auditLogs           AuditLog[]
+
+  @@map("companies")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  companyId     String    @map("company_id")
+  name          String
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  role          UserRole  @default(DIRECTOR)
+  phone         String?
+  cscsNumber    String?   @map("cscs_number")
+  cscsExpiry    DateTime? @map("cscs_expiry")
+  avatar        String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  company       Company   @relation(fields: [companyId], references: [id])
+  dailyLogs     DailyLog[]
+  incidents     Incident[]
+  timesheets    Timesheet[]
+  notifications Notification[]
+  auditLogs     AuditLog[]
+  managedJobs   Job[]     @relation("ProjectManager")
+
+  @@index([companyId])
+  @@index([email])
+  @@map("users")
+}
+
+model Invitation {
+  id        String   @id @default(cuid())
+  companyId String   @map("company_id")
+  email     String
+  role      UserRole
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  company   Company  @relation(fields: [companyId], references: [id])
+
+  @@index([companyId])
+  @@index([token])
+  @@map("invitations")
+}
+
+model Job {
+  id                  String    @id @default(cuid())
+  companyId           String    @map("company_id")
+  reference           String
+  title               String
+  clientName          String?   @map("client_name")
+  clientEmail         String?   @map("client_email")
+  clientPhone         String?   @map("client_phone")
+  siteAddress         String?   @map("site_address")
+  sitePostcode        String?   @map("site_postcode")
+  lat                 Float?
+  lng                 Float?
+  status              JobStatus @default(TENDER)
+  sector              String?
+  contractValue       Decimal?  @map("contract_value")
+  startDate           DateTime? @map("start_date")
+  endDate             DateTime? @map("end_date")
+  retentionPercent    Decimal?  @map("retention_percent")
+  defectsPeriodMonths Int?      @map("defects_period_months")
+  pmId                String?   @map("pm_id")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  company             Company   @relation(fields: [companyId], references: [id])
+  projectManager      User?     @relation("ProjectManager", fields: [pmId], references: [id])
+  phases              JobPhase[]
+  dailyLogs           DailyLog[]
+  estimates           Estimate[]
+  subcontractOrders   SubcontractOrder[]
+  invoices            Invoice[]
+  valuations          Valuation[]
+  cashFlowForecasts   CashFlowForecast[]
+  rams                RAMS[]
+  incidents           Incident[]
+  inductions          Induction[]
+  snagLists           SnagList[]
+  documents           Document[]
+  timesheetEntries    TimesheetEntry[]
+
+  @@index([companyId])
+  @@index([status])
+  @@index([pmId])
+  @@map("jobs")
+}
+
+model JobPhase {
+  id        String      @id @default(cuid())
+  jobId     String      @map("job_id")
+  name      String
+  order     Int
+  budget    Decimal?
+  startDate DateTime?   @map("start_date")
+  endDate   DateTime?   @map("end_date")
+  status    PhaseStatus @default(NOT_STARTED)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  job       Job         @relation(fields: [jobId], references: [id])
+
+  @@index([jobId])
+  @@map("job_phases")
+}
+
+model DailyLog {
+  id          String   @id @default(cuid())
+  jobId       String   @map("job_id")
+  userId      String   @map("user_id")
+  date        DateTime
+  weather     String?
+  labourCount Int?     @map("labour_count")
+  visitors    String?
+  notes       String?
+  photos      Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  job         Job      @relation(fields: [jobId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@index([jobId])
+  @@index([userId])
+  @@map("daily_logs")
+}
+
+model Estimate {
+  id               String         @id @default(cuid())
+  companyId        String         @map("company_id")
+  jobId            String?        @map("job_id")
+  reference        String
+  title            String
+  clientName       String?        @map("client_name")
+  status           EstimateStatus @default(DRAFT)
+  revision         Int            @default(1)
+  totalCost        Decimal?       @map("total_cost")
+  marginPercent    Decimal?       @map("margin_percent")
+  sellPrice        Decimal?       @map("sell_price")
+  parentEstimateId String?        @map("parent_estimate_id")
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+
+  company          Company        @relation(fields: [companyId], references: [id])
+  job              Job?           @relation(fields: [jobId], references: [id])
+  parentEstimate   Estimate?      @relation("EstimateRevisions", fields: [parentEstimateId], references: [id])
+  childEstimates   Estimate[]     @relation("EstimateRevisions")
+  sections         EstimateSection[]
+
+  @@index([companyId])
+  @@index([jobId])
+  @@map("estimates")
+}
+
+model EstimateSection {
+  id         String   @id @default(cuid())
+  estimateId String   @map("estimate_id")
+  name       String
+  order      Int
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  estimate   Estimate       @relation(fields: [estimateId], references: [id])
+  items      EstimateItem[]
+
+  @@index([estimateId])
+  @@map("estimate_sections")
+}
+
+model EstimateItem {
+  id               String  @id @default(cuid())
+  sectionId        String  @map("section_id")
+  description      String
+  unit             String?
+  quantity         Decimal @default(1)
+  materialCost     Decimal @default(0) @map("material_cost")
+  labourCost       Decimal @default(0) @map("labour_cost")
+  plantCost        Decimal @default(0) @map("plant_cost")
+  subcontractCost  Decimal @default(0) @map("subcontract_cost")
+  markupPercent    Decimal @default(0) @map("markup_percent")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  section          EstimateSection @relation(fields: [sectionId], references: [id])
+
+  @@index([sectionId])
+  @@map("estimate_items")
+}
+
+model Subcontractor {
+  id              String       @id @default(cuid())
+  companyId       String       @map("company_id")
+  name            String
+  trade           String?
+  contactName     String?      @map("contact_name")
+  email           String?
+  phone           String?
+  cisUtr          String?      @map("cis_utr")
+  cisVerified     Boolean      @default(false) @map("cis_verified")
+  cisTaxStatus    CISTaxStatus @default(NOT_VERIFIED) @map("cis_tax_status")
+  vatRegistered   Boolean      @default(false) @map("vat_registered")
+  insuranceExpiry DateTime?    @map("insurance_expiry")
+  rating          Int?
+  portalToken     String?      @map("portal_token")
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  company         Company      @relation(fields: [companyId], references: [id])
+  certs           SubcontractorCert[]
+  orders          SubcontractOrder[]
+  invoices        Invoice[]
+  cisDeductions   CISDeduction[]
+
+  @@index([companyId])
+  @@map("subcontractors")
+}
+
+model SubcontractorCert {
+  id              String   @id @default(cuid())
+  subcontractorId String   @map("subcontractor_id")
+  type            String
+  reference       String?
+  expiryDate      DateTime? @map("expiry_date")
+  documentUrl     String?  @map("document_url")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  subcontractor   Subcontractor @relation(fields: [subcontractorId], references: [id])
+
+  @@index([subcontractorId])
+  @@map("subcontractor_certs")
+}
+
+model SubcontractOrder {
+  id               String                  @id @default(cuid())
+  jobId            String                  @map("job_id")
+  subcontractorId  String                  @map("subcontractor_id")
+  trade            String?
+  value            Decimal?
+  orderDate        DateTime?               @map("order_date")
+  status           SubcontractOrderStatus  @default(DRAFT)
+  scopeDescription String?                 @map("scope_description")
+  createdAt        DateTime                @default(now()) @map("created_at")
+  updatedAt        DateTime                @updatedAt @map("updated_at")
+
+  job              Job                     @relation(fields: [jobId], references: [id])
+  subcontractor    Subcontractor           @relation(fields: [subcontractorId], references: [id])
+
+  @@index([jobId])
+  @@index([subcontractorId])
+  @@map("subcontract_orders")
+}
+
+model Invoice {
+  id                String        @id @default(cuid())
+  companyId         String        @map("company_id")
+  jobId             String?       @map("job_id")
+  subcontractorId   String?       @map("subcontractor_id")
+  type              InvoiceType   @default(SALES)
+  number            String
+  amount            Decimal
+  vat               Decimal       @default(0)
+  vatReverseCharge  Boolean       @default(false) @map("vat_reverse_charge")
+  total             Decimal
+  status            InvoiceStatus @default(DRAFT)
+  dueDate           DateTime?     @map("due_date")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+
+  company           Company       @relation(fields: [companyId], references: [id])
+  job               Job?          @relation(fields: [jobId], references: [id])
+  subcontractor     Subcontractor? @relation(fields: [subcontractorId], references: [id])
+  cisDeductions     CISDeduction[]
+
+  @@index([companyId])
+  @@index([jobId])
+  @@index([subcontractorId])
+  @@map("invoices")
+}
+
+model CISDeduction {
+  id              String   @id @default(cuid())
+  invoiceId       String   @map("invoice_id")
+  subcontractorId String   @map("subcontractor_id")
+  gross           Decimal
+  deductionRate   Decimal  @map("deduction_rate")
+  deductionAmount Decimal  @map("deduction_amount")
+  net             Decimal
+  taxMonth        String   @map("tax_month")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  invoice         Invoice       @relation(fields: [invoiceId], references: [id])
+  subcontractor   Subcontractor @relation(fields: [subcontractorId], references: [id])
+
+  @@index([invoiceId])
+  @@index([subcontractorId])
+  @@map("cis_deductions")
+}
+
+model Valuation {
+  id            String           @id @default(cuid())
+  jobId         String           @map("job_id")
+  number        Int
+  periodStart   DateTime         @map("period_start")
+  periodEnd     DateTime         @map("period_end")
+  grossValue    Decimal          @map("gross_value")
+  retention     Decimal          @default(0)
+  previousCerts Decimal          @default(0) @map("previous_certs")
+  thisCert      Decimal          @map("this_cert")
+  status        ValuationStatus  @default(DRAFT)
+  createdAt     DateTime         @default(now()) @map("created_at")
+  updatedAt     DateTime         @updatedAt @map("updated_at")
+
+  job           Job              @relation(fields: [jobId], references: [id])
+
+  @@index([jobId])
+  @@map("valuations")
+}
+
+model CashFlowForecast {
+  id             String   @id @default(cuid())
+  jobId          String   @map("job_id")
+  month          DateTime
+  incomeForecast Decimal  @map("income_forecast")
+  costForecast   Decimal  @map("cost_forecast")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  job            Job      @relation(fields: [jobId], references: [id])
+
+  @@index([jobId])
+  @@map("cash_flow_forecasts")
+}
+
+model RAMS {
+  id           String     @id @default(cuid())
+  jobId        String     @map("job_id")
+  title        String
+  version      Int        @default(1)
+  status       RAMSStatus @default(DRAFT)
+  content      Json?
+  approvedBy   String?    @map("approved_by")
+  approvedDate DateTime?  @map("approved_date")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  job          Job        @relation(fields: [jobId], references: [id])
+
+  @@index([jobId])
+  @@map("rams")
+}
+
+model Incident {
+  id                 String           @id @default(cuid())
+  jobId              String           @map("job_id")
+  userId             String           @map("user_id")
+  date               DateTime
+  severity           IncidentSeverity
+  description        String
+  photos             Json?
+  investigationNotes String?          @map("investigation_notes")
+  correctiveActions  String?          @map("corrective_actions")
+  status             IncidentStatus   @default(OPEN)
+  createdAt          DateTime         @default(now()) @map("created_at")
+  updatedAt          DateTime         @updatedAt @map("updated_at")
+
+  job                Job              @relation(fields: [jobId], references: [id])
+  user               User             @relation(fields: [userId], references: [id])
+
+  @@index([jobId])
+  @@index([userId])
+  @@map("incidents")
+}
+
+model Induction {
+  id          String   @id @default(cuid())
+  jobId       String   @map("job_id")
+  personName  String   @map("person_name")
+  companyName String?  @map("company_name")
+  date        DateTime
+  inductedBy  String?  @map("inducted_by")
+  signed      Boolean  @default(false)
+  topics      Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  job         Job      @relation(fields: [jobId], references: [id])
+
+  @@index([jobId])
+  @@map("inductions")
+}
+
+model SnagList {
+  id        String         @id @default(cuid())
+  jobId     String         @map("job_id")
+  area      String
+  status    SnagListStatus @default(OPEN)
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+
+  job       Job            @relation(fields: [jobId], references: [id])
+  items     SnagItem[]
+
+  @@index([jobId])
+  @@map("snag_lists")
+}
+
+model SnagItem {
+  id            String         @id @default(cuid())
+  snagListId    String         @map("snag_list_id")
+  description   String
+  location      String?
+  assignedTo    String?        @map("assigned_to")
+  priority      SnagItemPriority @default(MEDIUM)
+  status        SnagItemStatus @default(OPEN)
+  photos        Json?
+  dueDate       DateTime?      @map("due_date")
+  completedDate DateTime?      @map("completed_date")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+
+  snagList      SnagList       @relation(fields: [snagListId], references: [id])
+
+  @@index([snagListId])
+  @@map("snag_items")
+}
+
+model Document {
+  id         String   @id @default(cuid())
+  companyId  String   @map("company_id")
+  jobId      String?  @map("job_id")
+  category   String?
+  title      String
+  fileUrl    String?  @map("file_url")
+  uploadedBy String?  @map("uploaded_by")
+  version    Int      @default(1)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  company    Company  @relation(fields: [companyId], references: [id])
+  job        Job?     @relation(fields: [jobId], references: [id])
+
+  @@index([companyId])
+  @@index([jobId])
+  @@map("documents")
+}
+
+model Timesheet {
+  id        String          @id @default(cuid())
+  userId    String          @map("user_id")
+  weekStart DateTime        @map("week_start")
+  status    TimesheetStatus @default(DRAFT)
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+
+  user      User            @relation(fields: [userId], references: [id])
+  entries   TimesheetEntry[]
+
+  @@index([userId])
+  @@map("timesheets")
+}
+
+model TimesheetEntry {
+  id            String    @id @default(cuid())
+  timesheetId   String    @map("timesheet_id")
+  jobId         String    @map("job_id")
+  date          DateTime
+  hoursNormal   Decimal   @default(0) @map("hours_normal")
+  hoursOvertime Decimal   @default(0) @map("hours_overtime")
+  travel        Boolean   @default(false)
+  notes         String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  timesheet     Timesheet @relation(fields: [timesheetId], references: [id])
+  job           Job       @relation(fields: [jobId], references: [id])
+
+  @@index([timesheetId])
+  @@index([jobId])
+  @@map("timesheet_entries")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  type      String
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  actionUrl String?  @map("action_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  companyId String   @map("company_id")
+  userId    String?  @map("user_id")
+  action    String
+  entity    String
+  entityId  String?  @map("entity_id")
+  details   Json?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  company   Company  @relation(fields: [companyId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
+
+  @@index([companyId])
+  @@index([userId])
+  @@map("audit_logs")
+}
