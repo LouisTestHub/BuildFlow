@@ -40,58 +40,40 @@ function Navbar() {
 export default function CaseStudiesPage() {
   const caseStudies = [
     {
-      company: "Harrington Builders Ltd",
-      location: "Chelmsford, Essex",
-      industry: "Residential Refurbishment",
-      size: "12 employees, £2.5M annual turnover",
-      challenge: "Lost £15k on a recent project due to poor cost tracking and variations that weren't properly documented. Daily logs were in WhatsApp, costs in Excel, and site photos scattered across phones.",
-      solution: "Implemented BuildFlow across all 8 active sites. Site managers now log daily from mobile, all costs tracked against estimates in real-time, and every variation documented with photos and client approval.",
+      company: "Harrison & Sons Construction",
+      location: "Birmingham, West Midlands",
+      industry: "Residential Building",
+      size: "25 employees, £3.2M annual turnover",
+      challenge: "Harrison & Sons was losing money on every third job due to paper-based estimating. Quote preparation took 2 days, often missing hidden costs. Once on site, there was no real-time visibility into whether they were hitting margin targets. A recent extension project lost £18k due to variations that weren't properly tracked and invoiced.",
+      solution: "Implemented BuildFlow's estimating and job costing modules. Built a library of standard rates for materials, labour, and plant. Site managers now log costs daily from their phones. Every variation is documented with photos and client approval in the system. The dashboard shows live margin vs estimate for every active job.",
       results: [
-        { metric: "Margin improvement", value: "+4.2%" },
-        { metric: "Admin time saved", value: "10 hours/week" },
-        { metric: "Dispute resolution time", value: "-75%" },
-        { metric: "CIS compliance time", value: "-90%" }
+        { metric: "Estimate accuracy", value: "+30%" },
+        { metric: "First-year savings", value: "£180,000" },
+        { metric: "Estimating time", value: "2 days → 4 hours" },
+        { metric: "Variation tracking", value: "100% captured" }
       ],
-      quote: "We were losing £2-3k per job on things we couldn't track. BuildFlow paid for itself in the first month. The CIS module alone saves us a day every month.",
-      author: "Steve Harrington, Director",
-      image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1200",
-      logo: "HB"
+      quote: "Before BuildFlow, we were flying blind on job costs. We'd know we lost money only when the accountant told us at month-end. Now I can see margin erosion in real-time and fix it before it's too late. We've turned our profitability around completely.",
+      author: "Tom Harrison, Managing Director",
+      image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1200&q=80",
+      logo: "HS"
     },
     {
-      company: "MK Construction Group",
-      location: "Milton Keynes",
-      industry: "Commercial Fit-Out",
-      size: "28 employees, £6M annual turnover",
-      challenge: "Managing 15+ live sites with paper-based systems. Office manager spent Friday afternoons chasing site managers for daily logs via WhatsApp. Health & Safety documentation was a filing cabinet nightmare. No real-time view of job profitability.",
-      solution: "Rolled out BuildFlow company-wide with full H&S module. Digital RAMS, site induction tracking, and incident reporting. Real-time dashboards give contracts manager full visibility of all jobs. Subcontractor portal eliminated invoice chaos.",
+      company: "Apex Civil Engineering",
+      location: "Manchester, Greater Manchester",
+      industry: "Infrastructure & Civil Works",
+      size: "42 employees, £8.5M annual turnover",
+      challenge: "Apex was managing large infrastructure projects with paper-based Health & Safety documentation. RAMS were created in Word, printed, and filed in site cabinets. Site inductions were logged in ring binders. During an HSE spot check, they couldn't produce signed RAMS for two subcontractors, resulting in a £12k penalty. Management had zero real-time visibility into H&S compliance across 8 live sites.",
+      solution: "Rolled out BuildFlow's H&S module across all sites. Digital RAMS creation with templates, site-specific hazard identification, and electronic signatures. Site induction tracking with photo ID and competency checks. Incident reporting from mobile with automatic notification to H&S manager. Real-time compliance dashboard showing RAMS status, overdue inductions, and outstanding actions across all projects.",
       results: [
-        { metric: "Sites managed simultaneously", value: "15 → 22" },
-        { metric: "H&S compliance score", value: "+35%" },
-        { metric: "Invoice processing time", value: "-60%" },
-        { metric: "Real-time job visibility", value: "100%" }
+        { metric: "HSE incidents", value: "Zero in 12 months" },
+        { metric: "RAMS creation time", value: "-80%" },
+        { metric: "Compliance visibility", value: "Real-time" },
+        { metric: "HSE penalty fees", value: "£0 (down from £12k)" }
       ],
-      quote: "Before BuildFlow, I'd spend Friday afternoons chasing site managers for their daily logs via WhatsApp. Now everything's in the system before lunch. Game changer.",
-      author: "Rachel Okonkwo, Office Manager",
-      image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200",
-      logo: "MK"
-    },
-    {
-      company: "Thompson & Sons Building",
-      location: "Romford, London",
-      industry: "Residential New Build",
-      size: "35 employees, £8M annual turnover",
-      challenge: "Estimating took 2 days per tender, often missing items or miscalculating subcontractor costs. Once a job started, no way to track actual costs vs estimate until month-end. Lost three tenders in a row due to slow turnaround.",
-      solution: "Built a library of estimating templates in BuildFlow with standard rates for labour, materials, and plant. Tenders now take 4-6 hours instead of 2 days. Live cost tracking shows margin erosion before it's too late.",
-      results: [
-        { metric: "Estimating speed", value: "+75%" },
-        { metric: "Tender win rate", value: "+22%" },
-        { metric: "Budget overruns", value: "-68%" },
-        { metric: "Early warnings on margin issues", value: "Real-time" }
-      ],
-      quote: "The estimating tool is brilliant. We can knock out a detailed estimate in half the time and actually track if we're hitting our margins on site. Absolute no-brainer.",
-      author: "Gary Thompson, Contracts Manager",
-      image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1200",
-      logo: "TS"
+      quote: "The H&S module is a game-changer. We went from filing cabinets full of paper to a complete digital audit trail. When HSE turned up last month, I pulled up every RAMS, every induction, every toolbox talk in 5 minutes. They were impressed. So was I.",
+      author: "Sarah Mitchell, SHEQ Manager",
+      image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200&q=80",
+      logo: "AC"
     }
   ]
 
