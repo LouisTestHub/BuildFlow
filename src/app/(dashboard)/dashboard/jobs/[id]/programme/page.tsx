@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useParams } from "next/link"
+import { useParams } from "next/navigation"
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -152,7 +152,9 @@ export default function ProgrammePage() {
                   {/* Task Name */}
                   <div className="w-64 flex-shrink-0 flex items-center gap-2">
                     {task.critical && (
-                      <AlertTriangle className="w-3 h-3 text-red-500" title="Critical path" />
+                      <span title="Critical path">
+                        <AlertTriangle className="w-3 h-3 text-red-500" />
+                      </span>
                     )}
                     <span className={cn(
                       "text-sm truncate",

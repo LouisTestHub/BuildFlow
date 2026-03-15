@@ -8,7 +8,7 @@ import {
   ShieldCheck, CheckSquare, UserCog, FileText, BarChart3, Settings,
   HardHat, Search, Bell, ChevronLeft, Menu, LogOut,
   AlertTriangle, Clock, Bug, Upload, Activity, BookOpen, Receipt,
-  FileSpreadsheet, Newspaper
+  FileSpreadsheet, Newspaper, Package, CheckCircle, MessageSquare
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -34,6 +34,8 @@ const menuGroups = [
       { href: "/dashboard/finance/invoices", label: "Invoices", icon: Receipt },
       { href: "/dashboard/finance/valuations", label: "Valuations", icon: FileSpreadsheet },
       { href: "/dashboard/finance/cis", label: "CIS", icon: Newspaper },
+      { href: "/dashboard/variations", label: "Variations", icon: Activity },
+      { href: "/dashboard/procurement", label: "Procurement", icon: Package },
     ]
   },
   {
@@ -43,20 +45,30 @@ const menuGroups = [
     ]
   },
   {
-    label: "Health & Safety",
+    label: "Quality & Safety",
     items: [
+      { href: "/dashboard/quality", label: "Quality", icon: CheckCircle },
       { href: "/dashboard/safety/rams", label: "RAMS", icon: ShieldCheck },
       { href: "/dashboard/safety/incidents", label: "Incidents", icon: AlertTriangle },
       { href: "/dashboard/safety/inductions", label: "Inductions", icon: BookOpen },
       { href: "/dashboard/snagging", label: "Snagging", icon: CheckSquare },
+      { href: "/dashboard/snagging/tracker", label: "Snag Tracker", icon: Bug },
     ]
   },
   {
-    label: "Team",
+    label: "Documents & Info",
     items: [
-      { href: "/dashboard/team", label: "Directory", icon: UserCog },
-      { href: "/dashboard/team/timesheets", label: "Timesheets", icon: Clock },
       { href: "/dashboard/documents", label: "Documents", icon: FileText },
+      { href: "/dashboard/documents/drawings", label: "Drawings", icon: FileText },
+      { href: "/dashboard/rfi", label: "RFI", icon: MessageSquare },
+    ]
+  },
+  {
+    label: "Resources",
+    items: [
+      { href: "/dashboard/team", label: "Team", icon: UserCog },
+      { href: "/dashboard/team/timesheets", label: "Timesheets", icon: Clock },
+      { href: "/dashboard/plant", label: "Plant & Equipment", icon: HardHat },
     ]
   },
   {
