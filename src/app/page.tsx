@@ -24,10 +24,11 @@ function Navbar() {
             <span className="text-xl font-bold text-[#1A1A2E]">BuildFlow</span>
           </div>
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">Features</a>
-            <a href="#pricing" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">Pricing</a>
-            <a href="#testimonials" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">Testimonials</a>
-            <a href="#faq" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">FAQ</a>
+            <Link href="/features" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">Features</Link>
+            <Link href="/pricing" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">Pricing</Link>
+            <Link href="/about" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">About</Link>
+            <Link href="/case-studies" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">Case Studies</Link>
+            <Link href="/contact" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">Contact</Link>
           </div>
           <div className="hidden md:flex items-center gap-3">
             <Link href="/login">
@@ -43,10 +44,11 @@ function Navbar() {
         </div>
         {open && (
           <div className="md:hidden py-4 space-y-3 border-t">
-            <a href="#features" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>Features</a>
-            <a href="#pricing" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>Pricing</a>
-            <a href="#testimonials" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>Testimonials</a>
-            <a href="#faq" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>FAQ</a>
+            <Link href="/features" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>Features</Link>
+            <Link href="/pricing" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>Pricing</Link>
+            <Link href="/about" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>About</Link>
+            <Link href="/case-studies" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>Case Studies</Link>
+            <Link href="/contact" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>Contact</Link>
             <div className="flex gap-2 pt-2">
               <Link href="/login"><Button variant="outline" size="sm" className="w-full">Sign In</Button></Link>
               <Link href="/register"><Button size="sm" className="w-full">Free Trial</Button></Link>
@@ -426,19 +428,19 @@ export default function HomePage() {
             <div>
               <h4 className="text-white font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Integrations</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Changelog</a></li>
+                <li><Link href="/features" className="hover:text-white transition-colors">Features</Link></li>
+                <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+                <li><Link href="/industries" className="hover:text-white transition-colors">Industries</Link></li>
+                <li><Link href="/comparison" className="hover:text-white transition-colors">Compare</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">Resources</h4>
+              <h4 className="text-white font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
+                <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+                <li><Link href="/case-studies" className="hover:text-white transition-colors">Case Studies</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
                 <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">CIS Guide</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Help Centre</a></li>
               </ul>
             </div>
             <div>
