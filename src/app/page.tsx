@@ -28,6 +28,8 @@ function Navbar() {
             <Link href="/pricing" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">Pricing</Link>
             <Link href="/about" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">About</Link>
             <Link href="/case-studies" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">Case Studies</Link>
+            <Link href="/opportunity" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">Opportunity</Link>
+            <Link href="/market" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">Market Research</Link>
             <Link href="/contact" className="text-sm text-gray-600 hover:text-[#1A1A2E] transition-colors">Contact</Link>
           </div>
           <div className="hidden md:flex items-center gap-3">
@@ -47,6 +49,8 @@ function Navbar() {
             <Link href="/features" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>Features</Link>
             <Link href="/pricing" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>Pricing</Link>
             <Link href="/about" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>About</Link>
+            <Link href="/opportunity" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>Opportunity</Link>
+            <Link href="/market" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>Market Research</Link>
             <Link href="/case-studies" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>Case Studies</Link>
             <Link href="/contact" className="block text-sm text-gray-600 py-2" onClick={() => setOpen(false)}>Contact</Link>
             <div className="flex gap-2 pt-2">
