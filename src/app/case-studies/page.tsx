@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { HardHat, TrendingUp, Clock, Users, ChevronRight } from "lucide-react"
+import { HardHat, TrendingUp, ChevronRight } from "lucide-react"
 
 function Navbar() {
   return (
@@ -24,12 +24,8 @@ function Navbar() {
             <Link href="/contact" className="text-sm text-gray-600 hover:text-[#1A1A2E]">Contact</Link>
           </div>
           <div className="hidden md:flex items-center gap-3">
-            <Link href="/login">
-              <Button variant="ghost" size="sm">Sign In</Button>
-            </Link>
-            <Link href="/register">
-              <Button size="sm">Start Free Trial</Button>
-            </Link>
+            <Link href="/login"><Button variant="ghost" size="sm">Sign In</Button></Link>
+            <Link href="/register"><Button size="sm">Start Free Trial</Button></Link>
           </div>
         </div>
       </div>
@@ -37,46 +33,58 @@ function Navbar() {
   )
 }
 
-export default function CaseStudiesPage() {
-  const caseStudies = [
-    {
-      company: "Harrison & Sons Construction",
-      location: "Birmingham, West Midlands",
-      industry: "Residential Building",
-      size: "25 employees, £3.2M annual turnover",
-      challenge: "Harrison & Sons was losing money on every third job due to paper-based estimating. Quote preparation took 2 days, often missing hidden costs. Once on site, there was no real-time visibility into whether they were hitting margin targets. A recent extension project lost £18k due to variations that weren't properly tracked and invoiced.",
-      solution: "Implemented BuildFlow's estimating and job costing modules. Built a library of standard rates for materials, labour, and plant. Site managers now log costs daily from their phones. Every variation is documented with photos and client approval in the system. The dashboard shows live margin vs estimate for every active job.",
-      results: [
-        { metric: "Estimate accuracy", value: "+30%" },
-        { metric: "First-year savings", value: "£180,000" },
-        { metric: "Estimating time", value: "2 days → 4 hours" },
-        { metric: "Variation tracking", value: "100% captured" }
-      ],
-      quote: "Before BuildFlow, we were flying blind on job costs. We'd know we lost money only when the accountant told us at month-end. Now I can see margin erosion in real-time and fix it before it's too late. We've turned our profitability around completely.",
-      author: "Tom Harrison, Managing Director",
-      image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1200&q=80",
-      logo: "HS"
-    },
-    {
-      company: "Apex Civil Engineering",
-      location: "Manchester, Greater Manchester",
-      industry: "Infrastructure & Civil Works",
-      size: "42 employees, £8.5M annual turnover",
-      challenge: "Apex was managing large infrastructure projects with paper-based Health & Safety documentation. RAMS were created in Word, printed, and filed in site cabinets. Site inductions were logged in ring binders. During an HSE spot check, they couldn't produce signed RAMS for two subcontractors, resulting in a £12k penalty. Management had zero real-time visibility into H&S compliance across 8 live sites.",
-      solution: "Rolled out BuildFlow's H&S module across all sites. Digital RAMS creation with templates, site-specific hazard identification, and electronic signatures. Site induction tracking with photo ID and competency checks. Incident reporting from mobile with automatic notification to H&S manager. Real-time compliance dashboard showing RAMS status, overdue inductions, and outstanding actions across all projects.",
-      results: [
-        { metric: "HSE incidents", value: "Zero in 12 months" },
-        { metric: "RAMS creation time", value: "-80%" },
-        { metric: "Compliance visibility", value: "Real-time" },
-        { metric: "HSE penalty fees", value: "£0 (down from £12k)" }
-      ],
-      quote: "The H&S module is a game-changer. We went from filing cabinets full of paper to a complete digital audit trail. When HSE turned up last month, I pulled up every RAMS, every induction, every toolbox talk in 5 minutes. They were impressed. So was I.",
-      author: "Sarah Mitchell, SHEQ Manager",
-      image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200&q=80",
-      logo: "AC"
-    }
-  ]
+const caseStudies = [
+  {
+    slug: "webb-construction",
+    company: "Webb Construction",
+    person: "Marcus Webb",
+    location: "Surrey",
+    sector: "Commercial Fit-Outs",
+    size: "25 staff",
+    headline: "15 hours/week saved on admin, project overruns reduced 60%, CIS errors eliminated",
+    image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80",
+    logo: "WC",
+    stats: [
+      { label: "Admin saved", value: "15 hrs/week" },
+      { label: "Overruns reduced", value: "-60%" },
+      { label: "CIS errors", value: "Zero" },
+    ],
+  },
+  {
+    slug: "chen-developments",
+    company: "Chen Developments",
+    person: "Sarah Chen",
+    location: "Buckinghamshire",
+    sector: "Residential Development",
+    size: "8-person team",
+    headline: "30% faster completion, £40k/year saved on CIS, zero H&S incidents",
+    image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&q=80",
+    logo: "CD",
+    stats: [
+      { label: "Faster completion", value: "30%" },
+      { label: "CIS savings", value: "£40k/year" },
+      { label: "H&S incidents", value: "Zero" },
+    ],
+  },
+  {
+    slug: "morton-groundworks",
+    company: "Morton Groundworks",
+    person: "Dave Morton",
+    location: "West Midlands",
+    sector: "Highway & Drainage",
+    size: "15 staff",
+    headline: "Subbie compliance 60%→100%, invoice cycle cut from 45 to 14 days",
+    image: "https://images.unsplash.com/photo-1590496793929-36417d3117de?w=800&q=80",
+    logo: "MG",
+    stats: [
+      { label: "Compliance", value: "60→100%" },
+      { label: "Invoice cycle", value: "45→14 days" },
+      { label: "Cash flow gain", value: "£62k/year" },
+    ],
+  },
+]
 
+export default function CaseStudiesPage() {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -94,76 +102,53 @@ export default function CaseStudiesPage() {
         </div>
       </section>
 
-      {/* Case Studies */}
+      {/* Case Study Cards */}
       <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
-          {caseStudies.map((study, index) => (
-            <div key={study.company} className="bg-white rounded-2xl shadow-xl overflow-hidden">
-              {/* Image Header */}
-              <div className="relative h-80 overflow-hidden">
-                <img 
-                  src={study.image} 
-                  alt={study.company}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-16 h-16 rounded-xl bg-[#F97316] flex items-center justify-center text-2xl font-bold">
-                      {study.logo}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {caseStudies.map((study) => (
+              <Link
+                key={study.slug}
+                href={`/case-studies/${study.slug}`}
+                className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all border border-gray-100"
+              >
+                <div className="relative h-52 overflow-hidden">
+                  <img
+                    src={study.image}
+                    alt={study.company}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 text-white">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 rounded-lg bg-[#F97316] flex items-center justify-center font-bold text-sm">
+                        {study.logo}
+                      </div>
+                      <div>
+                        <div className="font-bold">{study.company}</div>
+                        <div className="text-xs text-gray-300">{study.sector} · {study.location}</div>
+                      </div>
                     </div>
-                    <div>
-                      <h2 className="text-2xl font-bold">{study.company}</h2>
-                      <p className="text-gray-300">{study.location} · {study.industry}</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-300">{study.size}</p>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-8 lg:p-12">
-                <div className="grid lg:grid-cols-2 gap-12 mb-12">
-                  <div>
-                    <h3 className="text-lg font-bold text-[#1A1A2E] mb-4 flex items-center gap-2">
-                      <span className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center text-red-600">⚠️</span>
-                      The Challenge
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">{study.challenge}</p>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-[#1A1A2E] mb-4 flex items-center gap-2">
-                      <span className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center text-green-600">✓</span>
-                      The Solution
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">{study.solution}</p>
                   </div>
                 </div>
 
-                {/* Results */}
-                <div className="bg-gray-50 rounded-xl p-8 mb-8">
-                  <h3 className="text-lg font-bold text-[#1A1A2E] mb-6 flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-[#F97316]" />
-                    Results
-                  </h3>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {study.results.map((result) => (
-                      <div key={result.metric} className="text-center">
-                        <div className="text-3xl font-bold text-[#F97316] mb-2">{result.value}</div>
-                        <div className="text-sm text-gray-600">{result.metric}</div>
+                <div className="p-6">
+                  <p className="text-sm font-semibold text-[#1A1A2E] mb-4">&ldquo;{study.headline}&rdquo;</p>
+                  <div className="grid grid-cols-3 gap-3 mb-4">
+                    {study.stats.map((stat, i) => (
+                      <div key={i} className="text-center">
+                        <div className="text-lg font-bold text-[#F97316]">{stat.value}</div>
+                        <div className="text-xs text-gray-500">{stat.label}</div>
                       </div>
                     ))}
                   </div>
+                  <div className="text-[#F97316] font-medium text-sm group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                    Read full story <ChevronRight className="w-4 h-4" />
+                  </div>
                 </div>
-
-                {/* Quote */}
-                <div className="border-l-4 border-[#F97316] pl-6 py-2">
-                  <p className="text-lg text-gray-700 italic mb-4">&ldquo;{study.quote}&rdquo;</p>
-                  <p className="text-sm font-semibold text-[#1A1A2E]">— {study.author}</p>
-                </div>
-              </div>
-            </div>
-          ))}
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -171,30 +156,21 @@ export default function CaseStudiesPage() {
       <section className="py-20 bg-[#1A1A2E]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">
-              The BuildFlow Impact
-            </h2>
-            <p className="text-gray-400">
-              Average improvements across our customer base
-            </p>
+            <h2 className="text-3xl font-bold text-white mb-4">The BuildFlow Impact</h2>
+            <p className="text-gray-400">Average improvements across our customer base</p>
           </div>
           <div className="grid md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-4xl font-bold text-[#F97316] mb-2">+3.8%</div>
-              <div className="text-gray-400 text-sm">Average Margin Improvement</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-[#F97316] mb-2">8 hrs</div>
-              <div className="text-gray-400 text-sm">Admin Time Saved per Week</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-[#F97316] mb-2">-70%</div>
-              <div className="text-gray-400 text-sm">Reduction in Disputes</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-[#F97316] mb-2">100%</div>
-              <div className="text-gray-400 text-sm">CIS Compliance Rate</div>
-            </div>
+            {[
+              { value: "+3.8%", label: "Average Margin Improvement" },
+              { value: "12 hrs", label: "Admin Time Saved per Week" },
+              { value: "-70%", label: "Reduction in Disputes" },
+              { value: "100%", label: "CIS Compliance Rate" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-4xl font-bold text-[#F97316] mb-2">{stat.value}</div>
+                <div className="text-gray-400 text-sm">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -206,19 +182,11 @@ export default function CaseStudiesPage() {
             Ready to Write Your Own Success Story?
           </h2>
           <p className="text-gray-600 text-lg mb-8">
-            Join hundreds of UK builders who've transformed their businesses with BuildFlow.
+            Join hundreds of UK builders who&apos;ve transformed their businesses with BuildFlow.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register">
-              <Button size="lg">
-                Start Free Trial
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button size="lg" variant="outline">
-                Book a Demo
-              </Button>
-            </Link>
+            <Link href="/register"><Button size="lg">Start Free Trial</Button></Link>
+            <Link href="/contact"><Button size="lg" variant="outline">Book a Demo</Button></Link>
           </div>
         </div>
       </section>
