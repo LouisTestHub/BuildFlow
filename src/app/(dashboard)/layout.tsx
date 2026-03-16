@@ -76,6 +76,7 @@ const menuGroups = [
     items: [
       { href: "/dashboard/reports", label: "Reports", icon: BarChart3 },
       { href: "/dashboard/settings", label: "Settings", icon: Settings },
+      { href: "/integrations", label: "Integrations", icon: Activity },
     ]
   },
 ]
