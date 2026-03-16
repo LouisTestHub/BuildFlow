@@ -7,19 +7,19 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { HardHat, Loader2 } from "lucide-react"
+import { HardHat, Loader2, Briefcase, HardHat as HardHatIcon, Wrench } from "lucide-react"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState("")
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
-    setLoading(true)
+    setLoading("form")
 
     const result = await signIn("credentials", {
       email,
@@ -29,203 +29,160 @@ export default function LoginPage() {
 
     if (result?.error) {
       setError("Invalid email or password")
-      setLoading(false)
+      setLoading("")
     } else {
       router.push("/dashboard")
     }
   }
 
+  const handleDemoLogin = async (demoEmail: string, role: string) => {
+    setError("")
+    setLoading(role)
+    setEmail(demoEmail)
+    setPassword("BuildFlow2026!")
+
+    const result = await signIn("credentials", {
+      email: demoEmail,
+      password: "BuildFlow2026!",
+      redirect: false,
+    })
+
+    if (result?.error) {
+      setError("Demo login failed — please try again")
+      setLoading("")
+    } else {
+      router.push("/dashboard")
+    }
+  }
+
+  const demoAccounts = [
+    {
+      role: "site-manager",
+      emoji: "👔",
+      icon: Briefcase,
+      label: "Site Manager",
+      email: "admin@buildflow.demo",
+      description: "Full admin access — jobs, CIS, financials, team",
+      color: "from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800",
+      ring: "ring-blue-300",
+    },
+    {
+      role: "project-manager",
+      emoji: "🏗️",
+      icon: HardHatIcon,
+      label: "Project Manager",
+      email: "pm@buildflow.demo",
+      description: "Projects, scheduling, progress tracking",
+      color: "from-[#F97316] to-orange-600 hover:from-orange-600 hover:to-orange-700",
+      ring: "ring-orange-300",
+    },
+    {
+      role: "subcontractor",
+      emoji: "🔨",
+      icon: Wrench,
+      label: "Subcontractor",
+      email: "sub@buildflow.demo",
+      description: "Portal view — timesheets, CIS statements, docs",
+      color: "from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800",
+      ring: "ring-emerald-300",
+    },
+  ]
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1A1A2E] via-[#16213E] to-[#0F3460] flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-[#F97316] flex items-center justify-center">
-              <HardHat className="w-6 h-6 text-white" />
+      <div className="w-full max-w-lg space-y-6">
+        {/* Demo Section — Top & Prominent */}
+        <Card className="border-2 border-[#F97316]/30 shadow-2xl">
+          <CardHeader className="text-center pb-2">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <div className="w-10 h-10 rounded-lg bg-[#F97316] flex items-center justify-center">
+                <HardHat className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-2xl font-bold text-[#1A1A2E]">BuildFlow</span>
             </div>
-            <span className="text-2xl font-bold text-[#1A1A2E]">BuildFlow</span>
-          </div>
-          <CardTitle>Welcome back</CardTitle>
-          <CardDescription>Sign in to your account to continue</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+            <CardTitle className="text-xl">Try the Demo — No Sign-Up Required</CardTitle>
+            <CardDescription className="text-base">
+              Click any role below to explore BuildFlow instantly
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3 pt-2">
+            {demoAccounts.map((demo) => (
+              <button
+                key={demo.role}
+                onClick={() => handleDemoLogin(demo.email, demo.role)}
+                disabled={!!loading}
+                className={`w-full flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r ${demo.color} text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 ${demo.ring} disabled:opacity-70 disabled:cursor-not-allowed`}
+              >
+                <span className="text-3xl">{demo.emoji}</span>
+                <div className="text-left flex-1">
+                  <div className="font-bold text-lg">{demo.label}</div>
+                  <div className="text-sm opacity-90">{demo.description}</div>
+                </div>
+                {loading === demo.role ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <span className="text-xl">→</span>
+                )}
+              </button>
+            ))}
+
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm text-center">
                 {error}
               </div>
             )}
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium text-gray-700">
-                Email
-              </label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="admin@buildflow.demo"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full" size="lg" disabled={loading}>
-              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-              Sign In
-            </Button>
-            <p className="text-center text-sm text-gray-500">
-              Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-[#F97316] hover:underline font-medium">
-                Register
-              </Link>
-            </p>
-            <div className="border-t pt-4 mt-4">
-              <p className="text-xs font-medium text-gray-600 text-center mb-3">
-                Try Demo (one-click login)
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={async () => {
-                    setEmail("admin@buildflow.demo")
-                    setPassword("BuildFlow2026!")
-                    setError("")
-                    setLoading(true)
-                    const result = await signIn("credentials", {
-                      email: "admin@buildflow.demo",
-                      password: "BuildFlow2026!",
-                      redirect: false,
-                    })
-                    if (result?.error) {
-                      setError("Demo login failed")
-                      setLoading(false)
-                    } else {
-                      router.push("/dashboard")
-                    }
-                  }}
-                  className="text-xs"
-                >
-                  Admin
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={async () => {
-                    setEmail("pm@buildflow.demo")
-                    setPassword("BuildFlow2026!")
-                    setError("")
-                    setLoading(true)
-                    const result = await signIn("credentials", {
-                      email: "pm@buildflow.demo",
-                      password: "BuildFlow2026!",
-                      redirect: false,
-                    })
-                    if (result?.error) {
-                      setError("Demo login failed")
-                      setLoading(false)
-                    } else {
-                      router.push("/dashboard")
-                    }
-                  }}
-                  className="text-xs"
-                >
-                  Project Manager
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={async () => {
-                    setEmail("site@buildflow.demo")
-                    setPassword("BuildFlow2026!")
-                    setError("")
-                    setLoading(true)
-                    const result = await signIn("credentials", {
-                      email: "site@buildflow.demo",
-                      password: "BuildFlow2026!",
-                      redirect: false,
-                    })
-                    if (result?.error) {
-                      setError("Demo login failed")
-                      setLoading(false)
-                    } else {
-                      router.push("/dashboard")
-                    }
-                  }}
-                  className="text-xs"
-                >
-                  Site Manager
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={async () => {
-                    setEmail("estimator@buildflow.demo")
-                    setPassword("BuildFlow2026!")
-                    setError("")
-                    setLoading(true)
-                    const result = await signIn("credentials", {
-                      email: "estimator@buildflow.demo",
-                      password: "BuildFlow2026!",
-                      redirect: false,
-                    })
-                    if (result?.error) {
-                      setError("Demo login failed")
-                      setLoading(false)
-                    } else {
-                      router.push("/dashboard")
-                    }
-                  }}
-                  className="text-xs"
-                >
-                  Estimator
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={async () => {
-                    setEmail("sub@buildflow.demo")
-                    setPassword("BuildFlow2026!")
-                    setError("")
-                    setLoading(true)
-                    const result = await signIn("credentials", {
-                      email: "sub@buildflow.demo",
-                      password: "BuildFlow2026!",
-                      redirect: false,
-                    })
-                    if (result?.error) {
-                      setError("Demo login failed")
-                      setLoading(false)
-                    } else {
-                      router.push("/dashboard")
-                    }
-                  }}
-                  className="text-xs col-span-2"
-                >
-                  Subcontractor
-                </Button>
+          </CardContent>
+        </Card>
+
+        {/* Standard Login — Below */}
+        <Card className="opacity-90">
+          <CardHeader className="text-center pb-2">
+            <CardTitle className="text-base">Already have an account?</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="h-10"
+                  />
+                </div>
+                <div>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="h-10"
+                  />
+                </div>
               </div>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+              <Button type="submit" className="w-full" disabled={!!loading}>
+                {loading === "form" ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                Sign In
+              </Button>
+              <p className="text-center text-sm text-gray-500">
+                No account?{" "}
+                <Link href="/register" className="text-[#F97316] hover:underline font-medium">
+                  Start Free Trial
+                </Link>
+              </p>
+            </form>
+          </CardContent>
+        </Card>
+
+        <p className="text-center text-xs text-gray-400">
+          <Link href="/" className="hover:text-white transition-colors">← Back to BuildFlow.co.uk</Link>
+        </p>
+      </div>
     </div>
   )
 }

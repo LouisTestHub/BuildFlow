@@ -287,9 +287,11 @@ export default function HomePage() {
                     <ArrowRight className="w-4 h-4 ml-1" />
                   </Button>
                 </Link>
-                <Button variant="outline" size="lg" className="w-full sm:w-auto text-base px-8">
-                  Watch Demo
-                </Button>
+                <Link href="/login">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-base px-8 border-[#F97316] text-[#F97316] hover:bg-[#F97316] hover:text-white">
+                    Try Demo →
+                  </Button>
+                </Link>
               </div>
               <div className="flex items-center gap-6 mt-8 text-sm text-gray-500">
                 <span className="flex items-center gap-1"><Check className="w-4 h-4 text-[#10B981]" /> 14-day free trial</span>
